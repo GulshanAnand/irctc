@@ -25,6 +25,10 @@ def home():
         ls = search_train(source,destination,date)
         train_list.clear()
         for ele in ls:
+            seats = getAvailableSeats(ele["train_no"], ele["date"])
+            if seats <= 0:
+                continue
+            ele["seats"] = seats
             train_list.append(ele)
         return redirect("/result")
     return render_template("index.html")
