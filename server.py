@@ -66,7 +66,10 @@ def passenger():
         for ele in data:
             ticket_list.append(ele[0])
         
-        bookTicket(train_list)
+        pnr, seat_no = bookTicket(ticket_list)
+        ticket_list.append(pnr)
+        ticket_list.append(seat_no)
+
         '''
         databse me ticket daalo FUNCTION
         '''

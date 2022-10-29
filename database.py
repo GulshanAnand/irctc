@@ -1,6 +1,7 @@
 import mysql.connector as sql
 import json
 from encrypt import *
+import datetime
 
 db = sql.connect(
   host = "localhost",
@@ -37,10 +38,17 @@ def checkUser(uid, passwd):
         return True
     return False
 
+def getWeekDay(date_str):
+    format = '%Y-%m-%d'
+    weekday = datetime.datetime.strptime(date_str, format)
+
+    weekDayNumber = weekday.strftime('%w')
+    return weekDayNumber
+
 def search_train(from_code, to_code, date_s):
     from_code.upper()
     to_code.upper()
-    weekday = 4 
+    weekday = getWeekDay(date_s)
     wdn = "%" + str(weekday) + "%"
     cursor = db.cursor(dictionary = True)
     cursor.execute("SELECT a.train_no, a.station_code as from_stat, b.station_code as to_stat,a.departure_t, b.arrival_t, %s as date from STATION as a, STATION as b, AVAILABLE as c where a.train_no=b.train_no and a.station_code=%s and b.station_code=%s and c.train_no = a.train_no and c.week_day like %s", (date_s, from_code, to_code, wdn,))
@@ -54,16 +62,30 @@ def search_train(from_code, to_code, date_s):
     # return table
 
 
-def bookTicket():
-    
-    cursor db.cursor()
-    cursor.execute("INSERT INTO TICKET VALUES(%s, %s, %s, %s, %s, %s, %s)", ("10001"))
+def bookTicket(d):
+    cursor = db.cursor(dictionary = True)
+    cursor.execute("SELECT MAX(pnr) as p FROM TICKET")
+    row = cursor.fetchone()
+    pnr = row['p']
+    pnr += 1
+
+    train_no = d[0]
+    date = d[5]
+    cursor.execute("SELECT count(*) as p FROM TICKET where train_no=%s and d_date=%s", (train_no, date,))
+    row = cursor.fetchone()
+    seat_no = row['p']
+    seat_no += 1
+
+    # print(d)
+    cursor.execute("INSERT INTO TICKET VALUES(%s, %s, %s, %s, %s, %s, %s)", (pnr,d[1],d[2],d[5],d[6],seat_no,d[0]))
+    db.commit()
+    return pnr,seat_no
 
 # abcd = 
 # abcd = search_train("CNB", "DHN", "2022-11-11")
 # for e in abcd:
 #     print(e)
-
+# bookTicket()
 
 '''
 select a.train_no,a.station_code, b.station_code,a.departure_t, b.arrival_t,"2022-10-28" as date from STATION as a, STATION as b, AVAILABLE as c where a.train_no=b.train_no and a.station_code="CNB" and b.station_code="PNBE" and c.train_no = a.train_no and c.week_day like '%4%'
