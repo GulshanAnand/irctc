@@ -49,6 +49,17 @@ def getWeekDay(date_str):
     weekDayNumber = weekday.strftime('%w')
     return weekDayNumber
 
+def getAvailableSeats(train_no, date):
+    cursor = db.cursor(dictionary = True)
+    cursor.execute("SELECT seat FROM AVAILABLE WHERE train_no = %s", (train_no,))
+    row = cursor.fetchone()
+    total_seats = row['seat']
+    cursor.execute("SELECT count(*) as p FROM TICKET WHERE train_no = %s and d_date = %s", (train_no, date,))
+    row = cursor.fetchone()
+    booked_seats = row['p']
+    availableSeats = total_seats - booked_seats
+    return availableSeats
+
 def search_train(from_code, to_code, date_s):
     from_code.upper()
     to_code.upper()
@@ -114,6 +125,9 @@ def delete_train(l):
 # bookTicket()
 # val = checkUser("IR1122", "IR12")
 # print(val)
+
+# print(getAvailableSeats("14006", "2022-11-01"))
+
 '''
 select a.train_no,a.station_code, b.station_code,a.departure_t, b.arrival_t,"2022-10-28" as date from STATION as a, STATION as b, AVAILABLE as c where a.train_no=b.train_no and a.station_code="CNB" and b.station_code="PNBE" and c.train_no = a.train_no and c.week_day like '%4%'
 '''

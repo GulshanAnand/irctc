@@ -2,7 +2,6 @@
 from database import *
 from flask import Flask, jsonify, request, redirect, render_template, url_for
 import jinja2
-
   
 # creating a Flask app
 app = Flask(__name__)
@@ -23,7 +22,6 @@ def home():
         source = request.form.get("source-station")
         destination = request.form.get("destination-station")
         date = request.form.get("dateOfJourney")
-        # print(source + "dateOfJourney is = " + date)
         ls = search_train(source,destination,date)
         train_list.clear()
         for ele in ls:
