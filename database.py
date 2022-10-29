@@ -53,6 +53,12 @@ def search_train(from_code, to_code, date_s):
     return result
     # return table
 
+
+def bookTicket():
+    
+    cursor db.cursor()
+    cursor.execute("INSERT INTO TICKET VALUES(%s, %s, %s, %s, %s, %s, %s)", ("10001"))
+
 # abcd = 
 # abcd = search_train("CNB", "DHN", "2022-11-11")
 # for e in abcd:

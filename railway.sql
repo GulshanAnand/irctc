@@ -1,8 +1,8 @@
--- MariaDB dump 10.19  Distrib 10.6.9-MariaDB, for debian-linux-gnu (x86_64)
+-- MariaDB dump 10.19  Distrib 10.6.10-MariaDB, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: railway
 -- ------------------------------------------------------
--- Server version	10.6.9-MariaDB-1
+-- Server version	10.6.10-MariaDB-1+b1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -47,7 +47,7 @@ CREATE TABLE `AVAILABLE` (
 
 LOCK TABLES `AVAILABLE` WRITE;
 /*!40000 ALTER TABLE `AVAILABLE` DISABLE KEYS */;
-INSERT INTO `AVAILABLE` VALUES ('12068','S_T_TFS',120,100,80,70,60),('12381','S_TW__S',120,100,80,70,60),('12184','_M__TF_',120,100,80,70,60),('14006','S_T_T__',120,100,80,70,60),('12417','SMTWT__',120,100,80,70,60);
+INSERT INTO `AVAILABLE` VALUES ('12068','02456',120,100,80,70,60),('12381','0236',120,100,80,70,60),('12184','145',120,100,80,70,60),('14006','024',120,100,80,70,60),('12417','01234',120,100,80,70,60);
 /*!40000 ALTER TABLE `AVAILABLE` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -107,15 +107,15 @@ DROP TABLE IF EXISTS `TICKET`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `TICKET` (
-  `pnr` varchar(10) NOT NULL,
+  `pnr` int(11) NOT NULL AUTO_INCREMENT,
   `from_code` varchar(10) NOT NULL,
   `to_code` varchar(10) NOT NULL,
   `d_date` date NOT NULL,
   `passenger_name` varchar(20) DEFAULT NULL,
   `seat_no` int(11) DEFAULT NULL,
-  `coach_no` int(11) DEFAULT NULL,
-  `berth_no` varchar(5) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `train_no` varchar(10) NOT NULL,
+  PRIMARY KEY (`pnr`)
+) ENGINE=InnoDB AUTO_INCREMENT=10001 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -164,4 +164,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-10-14 23:21:47
+-- Dump completed on 2022-10-29 15:32:59

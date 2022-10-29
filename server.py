@@ -61,10 +61,16 @@ def result():
 def passenger():
     if request.method == 'POST':
         data = request.form.listvalues()
-        print(data)
+        # print(data)
         ticket_list.clear()
         for ele in data:
             ticket_list.append(ele[0])
+        
+        bookTicket(train_list)
+        '''
+        databse me ticket daalo FUNCTION
+        '''
+
         return redirect('/ticket')
     return render_template('Passenger_details.html',pass_d=pass_list)
 
