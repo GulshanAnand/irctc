@@ -175,9 +175,14 @@
         <table class="content-table">
             <thead>
                 <tr>
+                    <!-- <th>Source</th> -->
+                    <th>Train Number</th>
                     <th>Source</th>
-                    <th>Train number</th>
                     <th>Destination</th>
+                    <th>Departure Time</th>
+                    <th>Arrival Time</th>
+                    <th>Date</th>
+                    <!-- <th>Destination</th> -->
                     <th>Click to Open</th>
                 </tr>
             </thead>
@@ -187,7 +192,7 @@
                     <tr>
                         {%for ele in items%}
                         <th >
-                            <input name = "{{items[ele]}}" value = "{{items[ele]}}" readonly/>
+                            <input name = "{{ele}}" value = "{{items[ele]}}" readonly/>
                         </th>
                         {%endfor%}
                         <th>

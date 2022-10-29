@@ -23,8 +23,8 @@ def home():
         source = request.form.get("source-station")
         destination = request.form.get("destination-station")
         date = request.form.get("dateOfJourney")
-        print(source + "dateOfJourney is = " + date)
-        ls = search_train(source,destination)
+        # print(source + "dateOfJourney is = " + date)
+        ls = search_train(source,destination,date)
         train_list.clear()
         for ele in ls:
             train_list.append(ele)
@@ -34,11 +34,24 @@ def home():
 @app.route('/result',methods=['GET','POST'])
 def result():
     if request.method == 'POST':
-        data = request.form
-        ele = data.to_dict()
+        train_no = request.form.get("train_no")
+        from_stat = request.form.get("from_stat")
+        to_stat = request.form.get("to_stat")
+        departure_t = request.form.get("departure_t")
+        arrival_t = request.form.get("arrival_t")
+        date = request.form.get("date")
+        # print(data[0])
+        # ele = data.to_dict()
         pass_list.clear()
-        for e in ele:
-            pass_list.append(e)
+        pass_list.append(train_no)
+        pass_list.append(from_stat)
+        pass_list.append(to_stat)
+        pass_list.append(departure_t)
+        pass_list.append(arrival_t)
+        pass_list.append(date)
+        # for e in data:
+        #     pass_list.append(e)
+        # print(pass_list)
         return redirect("/passenger")
     return render_template("result.html",tr_list=train_list)
 
@@ -48,6 +61,7 @@ def result():
 def passenger():
     if request.method == 'POST':
         data = request.form.listvalues()
+        print(data)
         ticket_list.clear()
         for ele in data:
             ticket_list.append(ele[0])

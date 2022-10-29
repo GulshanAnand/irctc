@@ -1,6 +1,7 @@
 import mysql.connector as sql
 import json
 from encrypt import *
+import datetime
 
 db = sql.connect(
   host = "localhost",
@@ -37,28 +38,18 @@ def checkUser(uid, passwd):
         return True
     return False
 
-def search_train(from_code, to_code, date_s):
+def getWeekDay(date_string):
+    dateObj = datetime.strptime(date_string, '%y-%m-%d')
+    wd = dateObj.
+
+def search_train(from_code, to_code, date):
     from_code.upper()
     to_code.upper()
-    weekday = 4 
-    wdn = "%" + str(weekday) + "%"
+    
     cursor = db.cursor(dictionary = True)
-    cursor.execute("SELECT a.train_no, a.station_code as from_stat, b.station_code as to_stat,a.departure_t, b.arrival_t, %s as date from STATION as a, STATION as b, AVAILABLE as c where a.train_no=b.train_no and a.station_code=%s and b.station_code=%s and c.train_no = a.train_no and c.week_day like %s", (date_s, from_code, to_code, wdn,))
-
-    # cursor.execute("SELECT t1.station_code as from_station, t1.train_no, t2.station_code as to_station from STATION as t1 cross join STATION as t2 where t1.station_code = %s and t2.station_code = %s and t1.train_no = t2.train_no", (from_code, to_code,))
+    cursor.execute("SELECT t1.station_code as from_station, t1.train_no, t2.station_code as to_station from STATION as t1 cross join STATION as t2 where t1.station_code = %s and t2.station_code = %s and t1.train_no = t2.train_no", (from_code, to_code,))
     table = cursor.fetchall()
     result = []
     for row in table:
         result.append(row)
     return result
-    # return table
-
-# abcd = 
-# abcd = search_train("CNB", "DHN", "2022-11-11")
-# for e in abcd:
-#     print(e)
-
-
-'''
-select a.train_no,a.station_code, b.station_code,a.departure_t, b.arrival_t,"2022-10-28" as date from STATION as a, STATION as b, AVAILABLE as c where a.train_no=b.train_no and a.station_code="CNB" and b.station_code="PNBE" and c.train_no = a.train_no and c.week_day like '%4%'
-'''

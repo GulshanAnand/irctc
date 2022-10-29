@@ -171,9 +171,33 @@
 <body>
     <form class="login" method = 'POST'>
         <h1>Passenger Details</h1>
-        {%for items in pass_d%}
-            <input name="{{items}}" value="{{items}} " readonly/>
-        {%endfor%}
+        <div style="padding: 8px;">
+            <b>TRAIN NUMBER: </b>
+            <input name="train_no" value="{{pass_d[0]}}" readonly style="border: 0px solid;"/>
+        </div>
+        <div style="padding: 8px;">
+            <b>FROM: </b>
+            <input name="from_stat" value="{{pass_d[1]}}" readonly style="border: 0px solid;"/>
+        </div>
+        <div style="padding: 8px;">
+            <b>TO: </b>
+            <input name="to_stat" value="{{pass_d[2]}}" readonly style="border: 0px solid;"/>
+        </div>
+        <div style="padding: 8px;">
+            <b>Departure Time: </b>
+            <input name="departure_t" value="{{pass_d[3]}}" readonly style="border: 0px solid;"/>
+        </div>
+        <div style="padding: 8px;">
+            <b>Arrival Time: </b>
+            <input name="arrival_t" value="{{pass_d[4]}}" readonly style="border: 0px solid;"/>
+        </div>
+        <div style="padding: 8px;">
+            <b>Date: </b>
+            <input name="date" value="{{pass_d[5]}}" readonly style="border: 0px solid;"/>
+        </div>
+        <!-- {%for items in pass_d%} -->
+            <!-- <input name="{{items}}" value="{{items}} " readonly/> -->
+        <!-- {%endfor%} -->
         <input type="text" placeholder="Name" name ="Name" />
         <input type="number" placeholder="Age" name = "Age" />
         <input type="text" placeholder="Gender" name = "Gender" />
