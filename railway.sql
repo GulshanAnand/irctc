@@ -111,7 +111,7 @@ CREATE TABLE `TICKET` (
   `seat_no` int(11) DEFAULT NULL,
   `train_no` varchar(10) NOT NULL,
   PRIMARY KEY (`pnr`)
-) ENGINE=InnoDB AUTO_INCREMENT=10011 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=10016 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -120,7 +120,7 @@ CREATE TABLE `TICKET` (
 
 LOCK TABLES `TICKET` WRITE;
 /*!40000 ALTER TABLE `TICKET` DISABLE KEYS */;
-INSERT INTO `TICKET` VALUES (10000,'CNB','DHN','2022-11-11','Driver',1,'12184'),(10001,'DHN','PNBE','2022-11-01','Gulshan Anand',1,'12381'),(10002,'DHN','PNBE','2022-11-01','Varun',2,'12381'),(10003,'DHN','PNBE','2022-11-01','Aviral',1,'14006'),(10004,'DHN','PNBE','2022-11-01','Avishek Kumar',2,'14006'),(10005,'DHN','PNBE','2022-11-15','Ravi',1,'14006'),(10006,'DHN','PNBE','2022-11-16','Rahul',1,'12381'),(10007,'PNBE','DHN','2022-11-04','Messi',1,'12184'),(10008,'PNBE','CNB','2022-11-05','Ronaldo',1,'12381'),(10009,'DHN','PNBE','2022-11-01','Kohli',3,'14006'),(10010,'PNBE','DHN','2022-11-01','Rohit',4,'14006');
+INSERT INTO `TICKET` VALUES (10000,'CNB','DHN','2022-11-11','Driver',1,'12184'),(10001,'DHN','PNBE','2022-11-01','Gulshan Anand',1,'12381'),(10002,'DHN','PNBE','2022-11-01','Varun',2,'12381'),(10003,'DHN','PNBE','2022-11-01','Aviral',1,'14006'),(10004,'DHN','PNBE','2022-11-01','Avishek Kumar',2,'14006'),(10005,'DHN','PNBE','2022-11-15','Ravi',1,'14006'),(10006,'DHN','PNBE','2022-11-16','Rahul',1,'12381'),(10007,'PNBE','DHN','2022-11-04','Messi',1,'12184'),(10008,'PNBE','CNB','2022-11-05','Ronaldo',1,'12381'),(10009,'DHN','PNBE','2022-11-01','Kohli',3,'14006'),(10010,'PNBE','DHN','2022-11-01','Rohit',4,'14006'),(10011,'CNB','PNBE','2022-11-01','Dhoni',5,'14006'),(10012,'CNB','DHN','2022-11-04','Yuvraj Singh',2,'12184'),(10013,'CNB','DHN','2022-10-04','varun',1,'12381'),(10014,'CNB','DHN','2022-11-01','gulshan',3,'12381'),(10015,'CNB','DHN','2022-11-01','Priya',4,'12381');
 /*!40000 ALTER TABLE `TICKET` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -136,7 +136,6 @@ CREATE TABLE `USER` (
   `user_id` varchar(20) NOT NULL,
   `user_password` varchar(20) NOT NULL,
   `age` int(11) DEFAULT NULL,
-  `dob` date DEFAULT NULL,
   `gender` varchar(10) DEFAULT NULL,
   `phone_no` varchar(10) NOT NULL,
   `emailid` varchar(50) NOT NULL,
@@ -150,7 +149,7 @@ CREATE TABLE `USER` (
 
 LOCK TABLES `USER` WRITE;
 /*!40000 ALTER TABLE `USER` DISABLE KEYS */;
-INSERT INTO `USER` VALUES ('A','IR12','IR12',19,'2003-12-21','M','0023332123','abc@gmail.com','Amber'),('B','IR13','IR13',29,'1993-12-21','M','0023332133','def@gmail.com','Jasper'),('C','IR14','IR14',39,'1983-12-21','M','0023332143','ghi@gmail.com','Rosaline');
+INSERT INTO `USER` VALUES ('A','IR12','IR12',19,'M','0023332123','abc@gmail.com','Amber'),('B','IR13','IR13',29,'M','0023332133','def@gmail.com','Jasper'),('C','IR14','IR14',39,'M','0023332143','ghi@gmail.com','Rosaline'),('aviral','aks@gmail.com1','1234',19,'male','100','aks@gmail.com1','house no'),('varun','varun@gmail.com','0987',25,'female','101','varun@gmail.com','stable'),('Admin','admin123@gmail.com','godpassword',42,'Male','9898989898','admin123@gmail.com','Delhi'),('sonam','sonam@gmail.com','123',20,'female','7543548154','sonam@gmail.com','Rosaline');
 /*!40000 ALTER TABLE `USER` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -163,4 +162,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-10-29 19:06:34
+-- Dump completed on 2022-10-30 23:08:01

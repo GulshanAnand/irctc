@@ -34,8 +34,8 @@
         .login::before, .login::after {
         content: "";
         position: absolute;
-        width: 400px;
-        height: 400px;
+        width: 800px;
+        height: 800px;
         border-top-left-radius: 40%;
         border-top-right-radius: 45%;
         border-bottom-left-radius: 35%;
@@ -159,14 +159,15 @@
             color: white;
         }
     </style>
-    
 
 </head>
 <body>
         <form class="login" method = 'POST'>
-         <h1 style="text-align: center;">DELETE</h1>
-         <input type="text" placeholder="TRAIN NUMBER" name="train_no">
-         <button style="margin-left: 35%">Submit</button>
+            <h2>TRAIN TICKET BOOKING</h2>
+            <input type="text" placeholder="FROM" name = "source-station">
+            <input type="text" placeholder="TO" name = "destination-station">
+            <input  type="date"  style="margin:-2" size="12" type="text" name = "dateOfJourney"/>
+            <button type="submit" style="margin-left: 35%">Search</button> 
         </form>
 </body>
 </html>

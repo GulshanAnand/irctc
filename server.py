@@ -2,24 +2,19 @@
 from database import *
 from flask import Flask, jsonify, request, redirect, render_template, url_for, flash
 import jinja2
-  
+import time
+from encrypt import *
 # creating a Flask app
 app = Flask(__name__)
+
+
 train_list = []
 pass_list = []
 ticket_list = []
-# on the terminal type: curl http://127.0.0.1:5000/
-# returns hello world when we use GET.
-# returns the data that we send when we use POST.
-# @app.route('/')
-# def home():
-        # data = "Hello World"
-        # return jsonify({'data': data})
 
 
-
-@app.route('/',methods=['GET','POST'])
-def home():
+@app.route('/search',methods=['GET','POST'])
+def search_train_page():
     if request.method == 'POST': 
         source = request.form.get("source-station")
         destination = request.form.get("destination-station")
@@ -33,10 +28,10 @@ def home():
             ele["seats"] = seats
             train_list.append(ele)
         return redirect("/result")
-    return render_template("index.html")
+    return render_template("search_train.html")
 
 @app.route('/result',methods=['GET','POST'])
-def result():
+def display_train_result():
     if request.method == 'POST':
         train_no = request.form.get("train_no")
         from_stat = request.form.get("from_stat")
@@ -57,56 +52,44 @@ def result():
 
 
 @app.route('/passenger',methods=['GET','POST'])
-def passenger():
+def input_passenger_detail():
     if request.method == 'POST':
         data = request.form.listvalues()
         ticket_list.clear()
         for ele in data:
             ticket_list.append(ele[0])
-        
-
         pnr, seat_no = bookTicket(ticket_list)
         ticket_list.append(pnr)
         ticket_list.append(seat_no)
-
-        '''
-        databse me ticket daalo FUNCTION
-
-        '''
-
         return redirect('/ticket')
     return render_template('Passenger_details.html',pass_d=pass_list)
 
 @app.route('/ticket',methods=['GET','POST'])
-def ticket():
+def show_ticket_details():
     if request.method == 'POST':
-        return redirect('/')
+        return redirect('/search')
     return render_template('ticket.html',ticket_list=ticket_list)
 
 
-@app.route('/login',methods=['GET','POST'])
-def login():
+@app.route('/',methods=['GET','POST'])
+def user_login_page():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
-
-        flag = checkUser(email,password)
-
-        '''
-        make pages for false credentials
-        '''
-
+        flag = checkUser(email, password)
         if flag == True:
-            return redirect('/')
+            if email =='admin123@gmail.com' and password == 'godpassword':
+                return redirect('/admin') 
+            return redirect('/search') 
         else:
-            print(f"email: {email}")
-            print(f"password: {password}")
-            return redirect('/login')
+            msg = 'INVALID CREDENTIALS'
+            url = '/'
+            return show_error_page(msg,url)
     return render_template('login.html')
 
 
 @app.route('/register',methods=['GET','POST'])
-def register():
+def user_register_page():
     if request.method == 'POST':
         name  = request.form.get('name')
         email  = request.form.get('email')
@@ -116,36 +99,72 @@ def register():
         address = request.form.get('address')
         password_1 = request.form.get('password_1')
         password_2 = request.form.get('password_2')
-        
+        if password_1 != password_2:
+            msg = 'PASSWORD ARE NOT SAME'
+            url = '/register'
+            return show_error_page(msg,url)
         user_detail = [name,email,password_1,age,gender,phone_number,email,address]
         flag = addUser(user_detail)
-        print(flag)
-
-        '''
-        handle if flag false 
-        '''
-        return "/login"
+        if flag == False:
+            msg = 'USER ALREADY EXIST'
+            url = '/register'
+            return show_error_page(msg,url)
+        return redirect('/')
     return render_template('registration.html')
 
+@app.route('/error')
+def show_error_page(msg,url):
+    print(msg)
+    print(url)
+    return render_template('error.html',msg=msg,url=url)
+
+
+
 @app.route('/admin',methods=['GET','POST'])
-def admin():
+def admin_home_page():
     return render_template('admin.html')
 
 @app.route('/admin/create',methods=['GET','POST'])
-def create():
+def admin_create_train():
+    if request.method == 'POST':
+        train_no = request.form.get('train_no')
+        station_no = request.form.get('station_no')
+        arrival_time = request.form.get('arrival_time')
+        departure_time = request.form.get('departure_time')
+        seats = request.form.get('seats')
+        day = request.form.get('day')
+        train_details = [station_no,train_no,arrival_time,departure_time,seats,day]
+        flag = create_train(train_details) 
+        if flag == False:
+            msg = 'TRAIN NUMBER ALREADY TAKEN'
+            url = '/admin/create'
+            return show_error_page(msg,url)
+        return redirect('/admin')
     return render_template('create.html')
 
 @app.route('/admin/delete',methods=['GET','POST'])
-def delete():
+def admin_delete_train():
+    if request.method == 'POST':
+        train_no = request.form.get('train_no')
+        delete_train_no = [train_no]
+        flag = delete_train(delete_train_no)
+        if flag == False:
+            msg = 'TRAIN NUMBER DOES NOT EXIST'
+            url = '/admin'
+            return show_error_page(msg,url)
+        return redirect('/admin/delete')
+
     return render_template('delete.html')
 
+
 @app.route('/admin/update',methods=['GET','POST'])
-def update():
+def admin_update_train():
+
+    '''
+    WORK KRNA ISPE
+    '''
+
     return render_template('update.html')
-
-
-
-
 
 # driver function
 if __name__ == '__main__':

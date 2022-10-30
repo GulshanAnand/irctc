@@ -106,17 +106,27 @@ def addUser(l):
 
 def create_train(l):
     cursor = db.cursor(dictionary = True)
+    cursor.execute("SELECT * FROM STATION WHERE train_no =%s", (l[1],))
+    table = cursor.fetchall()
+    if len(table) > 0:
+        return False
     cursor.execute("INSERT INTO STATION VALUES(%s, %s, %s, %s)", (l[0],l[1],l[2],l[3],))
     db.commit()
-    cursor.execute("INSERT INTO AVAILABLE VALUES(%s, %s, %s)", (l[0],l[5],l[4],))
+    cursor.execute("INSERT INTO AVAILABLE VALUES(%s, %s, %s)", (l[1],l[5],l[4],))
     db.commit()
+    return True
 
 def delete_train(l):
     cursor = db.cursor(dictionary = True)
+    cursor.execute("SELECT * FROM STATION WHERE train_no =%s", (l[0],))
+    table = cursor.fetchall()
+    if len(table) == 0:
+        return False
     cursor.execute("DELETE FROM AVAILABLE WHERE train_no = %s", (l[0],))
     db.commit()
     cursor.execute("DELETE FROM STATION WHERE train_no = %s", (l[0],))
     db.commit()
+    return True
 
 # abcd = 
 # abcd = search_train("CNB", "DHN", "2022-11-11")
@@ -127,6 +137,8 @@ def delete_train(l):
 # print(val)
 
 # print(getAvailableSeats("14006", "2022-11-01"))
+# tr = ["555555"]
+# print(delete_train(tr))
 
 '''
 select a.train_no,a.station_code, b.station_code,a.departure_t, b.arrival_t,"2022-10-28" as date from STATION as a, STATION as b, AVAILABLE as c where a.train_no=b.train_no and a.station_code="CNB" and b.station_code="PNBE" and c.train_no = a.train_no and c.week_day like '%4%'
