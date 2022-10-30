@@ -95,12 +95,12 @@ def bookTicket(d):
 
 def addUser(l):
     cursor = db.cursor(dictionary = True)
-    cursor.execute("SELECT * FROM USER WHERE user_id =%s", (l[0])) # l[0] is user_id
+    cursor.execute("SELECT * FROM USER WHERE user_id =%s", (l[1],)) # l[0] is user_id
     table = cursor.fetchall()
     if len(table) > 0:
         return False
     #uname, uid, pass, age, dob, gender, phone, email, address
-    cursor.execute("INSERT INTO USER VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)", (l[0],l[1],l[2],l[3],"",l[4],l[5],l[6],l[7],))
+    cursor.execute("INSERT INTO USER VALUES(%s,%s,%s,%s,%s,%s,%s,%s)", (l[0],l[1],l[2],l[3],l[4],l[5],l[6],l[7],))
     db.commit()
     return True
 
