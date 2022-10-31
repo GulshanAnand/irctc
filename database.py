@@ -60,7 +60,7 @@ def getAvailableSeats(train_no, date):
     availableSeats = total_seats - booked_seats
     return availableSeats
 
-def search_train(from_code, to_code, date_s):
+def searchTrain(from_code, to_code, date_s):
     from_code.upper()
     to_code.upper()
     weekday = getWeekDay(date_s)
@@ -104,7 +104,7 @@ def addUser(l):
     db.commit()
     return True
 
-def create_train(l):
+def createTrain(l):
     cursor = db.cursor(dictionary = True)
     cursor.execute("SELECT * FROM STATION WHERE train_no =%s", (l[1],))
     table = cursor.fetchall()
@@ -116,7 +116,7 @@ def create_train(l):
     db.commit()
     return True
 
-def delete_train(l):
+def deleteTrain(l):
     cursor = db.cursor(dictionary = True)
     cursor.execute("SELECT * FROM STATION WHERE train_no =%s", (l[0],))
     table = cursor.fetchall()
@@ -127,6 +127,9 @@ def delete_train(l):
     cursor.execute("DELETE FROM STATION WHERE train_no = %s", (l[0],))
     db.commit()
     return True
+
+def getTrainDetails(train_no):
+    pass
 
 # abcd = 
 # abcd = search_train("CNB", "DHN", "2022-11-11")

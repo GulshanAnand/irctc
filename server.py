@@ -19,7 +19,7 @@ def search_train_page():
         source = request.form.get("source-station")
         destination = request.form.get("destination-station")
         date = request.form.get("dateOfJourney")
-        ls = search_train(source,destination,date)
+        ls = searchTrain(source,destination,date)
         train_list.clear()
         for ele in ls:
             seats = getAvailableSeats(ele["train_no"], ele["date"])
@@ -134,7 +134,7 @@ def admin_create_train():
         seats = request.form.get('seats')
         day = request.form.get('day')
         train_details = [station_no,train_no,arrival_time,departure_time,seats,day]
-        flag = create_train(train_details) 
+        flag = createTrain(train_details) 
         if flag == False:
             msg = 'TRAIN NUMBER ALREADY TAKEN'
             url = '/admin/create'
@@ -147,7 +147,7 @@ def admin_delete_train():
     if request.method == 'POST':
         train_no = request.form.get('train_no')
         delete_train_no = [train_no]
-        flag = delete_train(delete_train_no)
+        flag = deleteTrain(delete_train_no)
         if flag == False:
             msg = 'TRAIN NUMBER DOES NOT EXIST'
             url = '/admin'
