@@ -76,7 +76,6 @@ def searchTrain(from_code, to_code, date_s):
     return result
     # return table
 
-
 def bookTicket(d):
     cursor = db.cursor(dictionary = True)
     cursor.execute("SELECT MAX(pnr) as p FROM TICKET")
@@ -128,8 +127,28 @@ def deleteTrain(l):
     db.commit()
     return True
 
+def getTrainSeatsAndWeekdays(train_no):
+    cursor = db.cursor(dictionary = True)
+    cursor.execute("SELECT * FROM AVAILABLE WHERE train_no =%s", (train_no,))
+    row = cursor.fetchone()
+    l = [row["seat"], row["week_day"]]
+    print(l)
+    return l
+
 def getTrainDetails(train_no):
-    pass
+    cursor = db.cursor(dictionary = True)
+    cursor.execute("SELECT * FROM STATION WHERE train_no =%s", (train_no,))
+    table = cursor.fetchall()
+    l = []
+    for row in table:
+        tmp = [row["station_code"], row["train_no"], row["arrival_t"], row["departure_t"]]
+        l.append(tmp)
+    return l
+
+#{'station_code': 'CNB', 'train_no': '14006', 'arrival_t': '18:00', 'departure_t': '18:10'}
+
+# getTrainDetails("14006")
+
 
 # abcd = 
 # abcd = search_train("CNB", "DHN", "2022-11-11")
