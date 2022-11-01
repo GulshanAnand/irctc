@@ -135,7 +135,16 @@ def getTrainSeatsAndWeekdays(train_no):
     print(l)
     return l
 
-def getTrainDetails(train_no):
+def updateSeatsAndWeekdays(l):
+    cursor = db.cursor(dictionary = True)
+    #l = [train_no, seat, week_day]
+    cursor.execute("UPDATE AVAILABLE SET seat = %s WHERE train_no =%s", (l[1],l[0],))
+    db.commit()
+    cursor.execute("UPDATE AVAILABLE SET week_day = %s WHERE train_no =%s", (l[2],l[0],))
+    db.commit()
+    
+
+def getTrainStations(train_no):
     cursor = db.cursor(dictionary = True)
     cursor.execute("SELECT * FROM STATION WHERE train_no =%s", (train_no,))
     table = cursor.fetchall()
@@ -145,10 +154,14 @@ def getTrainDetails(train_no):
         l.append(tmp)
     return l
 
+def updateTrainStations(l):
+    pass
+
 #{'station_code': 'CNB', 'train_no': '14006', 'arrival_t': '18:00', 'departure_t': '18:10'}
 
 # getTrainDetails("14006")
-
+# lst = ["989898", 80, "135"]
+# updateSeatsAndWeekdays(lst)
 
 # abcd = 
 # abcd = search_train("CNB", "DHN", "2022-11-11")
