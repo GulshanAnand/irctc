@@ -66,7 +66,7 @@ def searchTrain(from_code, to_code, date_s):
     weekday = getWeekDay(date_s)
     wdn = "%" + str(weekday) + "%"
     cursor = db.cursor(dictionary = True)
-    cursor.execute("SELECT a.train_no, a.station_code as from_stat, b.station_code as to_stat,a.departure_t, b.arrival_t, %s as date from STATION as a, STATION as b, AVAILABLE as c where a.train_no=b.train_no and a.station_code=%s and b.station_code=%s and c.train_no = a.train_no and c.week_day like %s", (date_s, from_code, to_code, wdn,))
+    cursor.execute("SELECT a.train_no, a.station_code as from_stat, b.station_code as to_stat,a.departure_t, b.arrival_t, %s as date from STATION2 as a, STATION2 as b, AVAILABLE as c where a.train_no=b.train_no and a.station_code=%s and b.station_code=%s and a.mode = 0 and b.mode = 1 and c.train_no = a.train_no and c.week_day like %s", (date_s, from_code, to_code, wdn,))
 
     # cursor.execute("SELECT t1.station_code as from_station, t1.train_no, t2.station_code as to_station from STATION as t1 cross join STATION as t2 where t1.station_code = %s and t2.station_code = %s and t1.train_no = t2.train_no", (from_code, to_code,))
     table = cursor.fetchall()
@@ -76,44 +76,54 @@ def searchTrain(from_code, to_code, date_s):
     return result
     # return table
 
-def bookTicket(d):
+def bookTicket(d, curr_user):
     cursor = db.cursor(dictionary = True)
-    cursor.execute("SELECT MAX(pnr) as p FROM TICKET")
-    row = cursor.fetchone()
-    pnr = row['p']
-    pnr += 1
     train_no = d[0]
     date = d[5]
     cursor.execute("SELECT count(*) as p FROM TICKET where train_no=%s and d_date=%s", (train_no, date,))
     row = cursor.fetchone()
     seat_no = row['p']
     seat_no += 1
-    cursor.execute("INSERT INTO TICKET VALUES(%s, %s, %s, %s, %s, %s, %s)", (pnr,d[1],d[2],d[5],d[6],seat_no,d[0],))
+    cursor.execute("INSERT INTO TICKET(from_code,to_code,d_date,passenger_name,seat_no,train_no,user_id) VALUES(%s, %s, %s, %s, %s, %s, %s)", (d[1],d[2],d[5],d[6],seat_no,d[0],curr_user,))
     db.commit()
+    cursor.execute("SELECT MAX(pnr) as p FROM TICKET")
+    row = cursor.fetchone()
+    pnr = row['p']
     return pnr,seat_no
 
 def addUser(l):
     cursor = db.cursor(dictionary = True)
-    cursor.execute("SELECT * FROM USER WHERE user_id =%s", (l[1],)) # l[0] is user_id
-    table = cursor.fetchall()
-    if len(table) > 0:
-        return False
+    # cursor.execute("SELECT * FROM USER WHERE user_id =%s", (l[1],)) # l[0] is user_id
+    # table = cursor.fetchall()
+    # if len(table) > 0:
+    #     return False
     #uname, uid, pass, age, dob, gender, phone, email, address
-    cursor.execute("INSERT INTO USER VALUES(%s,%s,%s,%s,%s,%s,%s,%s)", (l[0],l[1],l[2],l[3],l[4],l[5],l[6],l[7],))
-    db.commit()
+    try:
+        cursor.execute("INSERT INTO USER VALUES(%s,%s,%s,%s,%s,%s,%s,%s)", (l[0],l[1],l[2],l[3],l[4],l[5],l[6],l[7],))
+        db.commit()
+    except sql.IntegrityError as err:
+        return False
     return True
 
 def createTrain(l):
     cursor = db.cursor(dictionary = True)
-    cursor.execute("SELECT * FROM STATION WHERE train_no =%s", (l[1],))
+    cursor.execute("SELECT * FROM STATION WHERE train_no =%s", (l[0],))
     table = cursor.fetchall()
     if len(table) > 0:
         return False
-    cursor.execute("INSERT INTO STATION VALUES(%s, %s, %s, %s)", (l[0],l[1],l[2],l[3],))
-    db.commit()
-    cursor.execute("INSERT INTO AVAILABLE VALUES(%s, %s, %s)", (l[1],l[5],l[4],))
+    # cursor.execute("INSERT INTO STATION VALUES(%s, %s, %s, %s)", (l[0],l[1],l[2],l[3],))
+    # db.commit()
+    cursor.execute("INSERT INTO AVAILABLE VALUES(%s, %s, %s)", (l[0],l[2],l[1],))
     db.commit()
     return True
+
+def addStations(l):
+    cursor = db.cursor(dictionary = True)
+    # train_no, source, sat,sdt,destination,dat,ddt
+    cursor.execute("INSERT INTO STATION2 VALUES(%s, %s, %s, %s, 0)", (l[1], l[0], l[2], l[3],))
+    db.commit();
+    cursor.execute("INSERT INTO STATION2 VALUES(%s, %s, %s, %s, 1)", (l[4], l[0], l[5], l[6],))
+    db.commit();
 
 def deleteTrain(l):
     cursor = db.cursor(dictionary = True)
@@ -142,7 +152,6 @@ def updateSeatsAndWeekdays(l):
     db.commit()
     cursor.execute("UPDATE AVAILABLE SET week_day = %s WHERE train_no =%s", (l[2],l[0],))
     db.commit()
-    
 
 def getTrainStations(train_no):
     cursor = db.cursor(dictionary = True)

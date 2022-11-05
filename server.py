@@ -1,12 +1,12 @@
 # import necessary libraries and functions
 from database import *
-from flask import Flask, jsonify, request, redirect, render_template, url_for, flash
+from flask import Flask, jsonify, request, redirect, render_template, url_for, flash, session
 import jinja2
 import time
 from encrypt import *
 # creating a Flask app
 app = Flask(__name__)
-
+app.secret_key = "apna_key"
 
 train_list = []
 pass_list = []
@@ -58,7 +58,8 @@ def input_passenger_detail():
         ticket_list.clear()
         for ele in data:
             ticket_list.append(ele[0])
-        pnr, seat_no = bookTicket(ticket_list)
+        curr_user = session["user"]
+        pnr, seat_no = bookTicket(ticket_list, curr_user)
         ticket_list.append(pnr)
         ticket_list.append(seat_no)
         return redirect('/ticket')
@@ -78,9 +79,10 @@ def user_login_page():
         password = request.form.get('password')
         flag = checkUser(email, password)
         if flag == True:
+            session["user"] = email
             if email =='admin123@gmail.com' and password == 'godpassword':
                 return redirect('/admin') 
-            return redirect('/search') 
+            return redirect('/search')
         else:
             msg = 'INVALID CREDENTIALS'
             url = '/'
@@ -128,19 +130,36 @@ def admin_home_page():
 def admin_create_train():
     if request.method == 'POST':
         train_no = request.form.get('train_no')
-        station_no = request.form.get('station_no')
-        arrival_time = request.form.get('arrival_time')
-        departure_time = request.form.get('departure_time')
+        # station_no = request.form.get('station_no')
+        # arrival_time = request.form.get('arrival_time')
+        # departure_time = request.form.get('departure_time')
         seats = request.form.get('seats')
         day = request.form.get('day')
-        train_details = [station_no,train_no,arrival_time,departure_time,seats,day]
-        flag = createTrain(train_details) 
+        train_details = [train_no,seats,day]
+        flag = createTrain(train_details)
         if flag == False:
             msg = 'TRAIN NUMBER ALREADY TAKEN'
             url = '/admin/create'
             return show_error_page(msg,url)
-        return redirect('/admin')
+        session["train_no"] = train_no
+        return redirect('/admin/create/addstation')
     return render_template('create.html')
+
+@app.route('/admin/create/addstation', methods=['GET','POST'])
+def admin_add_station():
+    if request.method == 'POST':
+        train_no = request.form.get('train_no')
+        source = request.form.get('source')
+        source_at = request.form.get('source_at')
+        source_dt = request.form.get('source_dt')
+        destination = request.form.get('destination')
+        destination_at = request.form.get('destination_at')
+        destination_dt = request.form.get('destination_dt')
+        trip = [train_no, source, source_at, source_dt,destination,destination_at,destination_dt]
+        addStations(trip)
+    add_train_no = session["train_no"]
+    print("\n\n\nvalue in addstation:" + add_train_no)
+    return render_template('add_station.html', add_train_no=add_train_no)
 
 @app.route('/admin/delete',methods=['GET','POST'])
 def admin_delete_train():
