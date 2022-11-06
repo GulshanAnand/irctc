@@ -172,14 +172,14 @@
 <body>
     <form class="login" method = 'POST'>
         <h2 style="text-align: center">Register</h2>
-        <input  type="text" placeholder="Name" name="name">
-        <input  type="email" placeholder="Email" name="email">
-        <input  type="text" placeholder="Number" name="number">
+        <input  type="text" placeholder="Name" name="name" required>
+        <input  type="email" placeholder="Email" name="email" required>
+        <input  type="text" placeholder="Number" pattern="[0-9]{10}" name="number" required>
         <input  type="text" placeholder="Age"  name="age">
-        <input  type="text" placeholder="Gender"  name="gender">
+        <input  type="text" placeholder="Gender" pattern="Male|Female" name="gender">
         <input   type="text" placeholder="Address" name="address">
-        <input  type="text" placeholder="New Password"  name="password_1">
-        <input  type="text" placeholder="Confirm Password"  name="password_2">
+        <input  type="password" placeholder="New Password"  name="password_1" required>
+        <input  type="password" placeholder="Confirm Password"  name="password_2" required>
         <button  type="submit">Submit</button>
     </form>
 </body>

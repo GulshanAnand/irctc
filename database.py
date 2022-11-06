@@ -66,7 +66,7 @@ def searchTrain(from_code, to_code, date_s):
     weekday = getWeekDay(date_s)
     wdn = "%" + str(weekday) + "%"
     cursor = db.cursor(dictionary = True)
-    cursor.execute("SELECT a.train_no, a.station_code as from_stat, b.station_code as to_stat,a.departure_t, b.arrival_t, %s as date from STATION2 as a, STATION2 as b, AVAILABLE as c where a.train_no=b.train_no and a.station_code=%s and b.station_code=%s and a.mode = 0 and b.mode = 1 and c.train_no = a.train_no and c.week_day like %s", (date_s, from_code, to_code, wdn,))
+    cursor.execute("SELECT a.train_no, a.station_code as from_stat, b.station_code as to_stat,a.departure_t, b.arrival_t, %s as date from STATION as a, STATION as b, AVAILABLE as c where a.train_no=b.train_no and a.station_code=%s and b.station_code=%s and a.mode = 0 and b.mode = 1 and c.train_no = a.train_no and c.week_day like %s", (date_s, from_code, to_code, wdn,))
 
     # cursor.execute("SELECT t1.station_code as from_station, t1.train_no, t2.station_code as to_station from STATION as t1 cross join STATION as t2 where t1.station_code = %s and t2.station_code = %s and t1.train_no = t2.train_no", (from_code, to_code,))
     table = cursor.fetchall()
@@ -120,9 +120,9 @@ def createTrain(l):
 def addStations(l):
     cursor = db.cursor(dictionary = True)
     # train_no, source, sat,sdt,destination,dat,ddt
-    cursor.execute("INSERT INTO STATION2 VALUES(%s, %s, %s, %s, 0)", (l[1], l[0], l[2], l[3],))
+    cursor.execute("INSERT INTO STATION VALUES(%s, %s, %s, %s, 0)", (l[1], l[0], l[2], l[3],))
     db.commit();
-    cursor.execute("INSERT INTO STATION2 VALUES(%s, %s, %s, %s, 1)", (l[4], l[0], l[5], l[6],))
+    cursor.execute("INSERT INTO STATION VALUES(%s, %s, %s, %s, 1)", (l[4], l[0], l[5], l[6],))
     db.commit();
 
 def deleteTrain(l):
