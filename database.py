@@ -116,9 +116,9 @@ def createTrain(l):
     try:
         cursor.execute("INSERT INTO AVAILABLE VALUES(%s, %s, %s)", (l[0],l[2],l[1],))
         db.commit()
-        return True
     except sql.IntegrityError as err:
         return False
+    return True
 
 def addStation(l):
     cursor = db.cursor(dictionary = True)
@@ -141,10 +141,12 @@ def deleteTrain(l):
     db.commit()
     return True
 
-def getTrainSeatsAndWeekdays(train_no):
+def getTrainDetails(train_no):
     cursor = db.cursor(dictionary = True)
     cursor.execute("SELECT * FROM AVAILABLE WHERE train_no =%s", (train_no,))
     row = cursor.fetchone()
+    if row == None:
+        return []
     l = [row["seat"], row["week_day"]]
     print(l)
     return l
@@ -153,11 +155,10 @@ def updateSeatsAndWeekdays(l):
     cursor = db.cursor(dictionary = True)
     #l = [train_no, seat, week_day]
     cursor.execute("UPDATE AVAILABLE SET seat = %s WHERE train_no =%s", (l[1],l[0],))
-    db.commit()
     cursor.execute("UPDATE AVAILABLE SET week_day = %s WHERE train_no =%s", (l[2],l[0],))
     db.commit()
 
-def getTrainStations(train_no):
+def getStations(train_no):
     cursor = db.cursor(dictionary = True)
     cursor.execute("SELECT * FROM STATION WHERE train_no =%s", (train_no,))
     table = cursor.fetchall()
@@ -172,7 +173,8 @@ def updateTrainStations(l):
 
 #{'station_code': 'CNB', 'train_no': '14006', 'arrival_t': '18:00', 'departure_t': '18:10'}
 
-# getTrainDetails("14006")
+# l = getTrainDetails("1400")
+# print(l)
 # lst = ["989898", 80, "135"]
 # updateSeatsAndWeekdays(lst)
 
