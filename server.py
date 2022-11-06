@@ -142,10 +142,10 @@ def admin_create_train():
             url = '/admin/create'
             return show_error_page(msg,url)
         session["train_no"] = train_no
-        return redirect('/admin/create/addstation')
+        return redirect('/admin/addstation')
     return render_template('create.html')
 
-@app.route('/admin/create/addstation', methods=['GET','POST'])
+@app.route('/admin/addstation', methods=['GET','POST'])
 def admin_add_station():
     if request.method == 'POST':
         train_no = request.form.get('train_no')
@@ -156,9 +156,15 @@ def admin_add_station():
         destination_at = request.form.get('destination_at')
         destination_dt = request.form.get('destination_dt')
         trip = [train_no, source, source_at, source_dt,destination,destination_at,destination_dt]
-        addStations(trip)
-    add_train_no = session["train_no"]
-    print("\n\n\nvalue in addstation:" + add_train_no)
+        flag = addStation(trip)
+        if flag == False:
+            msg = 'INVALID TRAIN NUMBER'
+            url = '/admin/addstation'
+            return show_error_page(msg,url)
+    add_train_no = session.get("train_no")
+    if add_train_no == None:
+        add_train_no = ""
+    # print("\n\n\nvalue in addstation:" + add_train_no)
     return render_template('add_station.html', add_train_no=add_train_no)
 
 @app.route('/admin/delete',methods=['GET','POST'])

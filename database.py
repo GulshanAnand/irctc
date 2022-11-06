@@ -107,23 +107,29 @@ def addUser(l):
 
 def createTrain(l):
     cursor = db.cursor(dictionary = True)
-    cursor.execute("SELECT * FROM STATION WHERE train_no =%s", (l[0],))
-    table = cursor.fetchall()
-    if len(table) > 0:
-        return False
+    # cursor.execute("SELECT * FROM STATION WHERE train_no =%s", (l[0],))
+    # table = cursor.fetchall()
+    # if len(table) > 0:
+    #     return False
     # cursor.execute("INSERT INTO STATION VALUES(%s, %s, %s, %s)", (l[0],l[1],l[2],l[3],))
     # db.commit()
-    cursor.execute("INSERT INTO AVAILABLE VALUES(%s, %s, %s)", (l[0],l[2],l[1],))
-    db.commit()
-    return True
+    try:
+        cursor.execute("INSERT INTO AVAILABLE VALUES(%s, %s, %s)", (l[0],l[2],l[1],))
+        db.commit()
+        return True
+    except sql.IntegrityError as err:
+        return False
 
-def addStations(l):
+def addStation(l):
     cursor = db.cursor(dictionary = True)
     # train_no, source, sat,sdt,destination,dat,ddt
-    cursor.execute("INSERT INTO STATION VALUES(%s, %s, %s, %s, 0)", (l[1], l[0], l[2], l[3],))
-    db.commit();
-    cursor.execute("INSERT INTO STATION VALUES(%s, %s, %s, %s, 1)", (l[4], l[0], l[5], l[6],))
-    db.commit();
+    try:
+        cursor.execute("INSERT INTO STATION VALUES(%s, %s, %s, %s, 0)", (l[1], l[0], l[2], l[3],))
+        cursor.execute("INSERT INTO STATION VALUES(%s, %s, %s, %s, 1)", (l[4], l[0], l[5], l[6],))
+        db.commit();
+    except sql.IntegrityError as err:
+        return False
+    return True
 
 def deleteTrain(l):
     cursor = db.cursor(dictionary = True)
@@ -132,8 +138,6 @@ def deleteTrain(l):
     if len(table) == 0:
         return False
     cursor.execute("DELETE FROM AVAILABLE WHERE train_no = %s", (l[0],))
-    db.commit()
-    cursor.execute("DELETE FROM STATION WHERE train_no = %s", (l[0],))
     db.commit()
     return True
 
