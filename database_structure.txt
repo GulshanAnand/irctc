@@ -74,7 +74,12 @@ CREATE TABLE TICKET(
     berth_no VARCHAR (5)
 );
 
-
+-- experiment start
+create table STATION_NAME(
+	station_code varchar(10) primary key,
+	station_name varchar(50)
+);
+--expriment end
 
 -- query to search the trains from one station to other:
 select t1.station_code, t1.train_no, t2.station_code from STATION as t1 cross join STATION as t2 where t1.station_code = 'CNB' and t2.station_code = 'PNBE' and t1.train_no = t2.train_no;

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -35,8 +34,8 @@
         .login::before, .login::after {
         content: "";
         position: absolute;
-        width: 400px;
-        height: 400px;
+        width: 1200px;
+        height: 1200px;
         border-top-left-radius: 40%;
         border-top-right-radius: 45%;
         border-bottom-left-radius: 35%;
@@ -160,25 +159,16 @@
             color: white;
         }
     </style>
-</head>
 
+</head>
 <body>
-        <form class="login" method='POST'>
-            <h1>UPDATE</h1>
-            <h5 style="font-size: 24px;">Train_Availability</h5>
-            <input type="text" placeholder="TRAIN_NO">
-            <button>show</button>
-            <br>    
-            <input type="text" style="margin-left: 12px" placeholder="Seats">
-            <input type="text" placeholder="Week Days">            
-            <button>submit</button>
-            <h5 style="font-size: 24px;">Trains</h5>
-            <input type="text" placeholder="TRAIN_NO">
-            <button>show</button>
-            <br>
-            <input type="text" placeholder="ARRIVAL_TIME">
-            <input type="text" placeholder="DEPARTURE_TIME">
-            <input type="text" placeholder="STATION_NAME">
-            <button>submit</button>
+        <form class="login" method = 'POST'>
+            <h1 style="text-align: center;" >UPDATE</h1>
+            <h3 style="text-align: center;" >ENTER NEW TRAIN DETAILS</h3>
+            <input type="text" placeholder="TRAIN NUMBER" name="train_no">
+            <input type="number" placeholder="NUMBER OF SEATS" name="seats">
+            <input type="text" placeholder="WEEKDAYS" name="day">
+            <button style="margin-left: 35%">Submit</button>
         </form>
+</body>
 </html>

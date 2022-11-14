@@ -38,10 +38,6 @@ def checkUser(uid, passwd):
     if password == passwd:
         return True
     return False
-    # passHash = encrypt(passwd)
-    # if password == passHash:
-    #     return True
-    # return False
 
 def getWeekDay(date_str):
     format = '%Y-%m-%d'
@@ -67,14 +63,11 @@ def searchTrain(from_code, to_code, date_s):
     wdn = "%" + str(weekday) + "%"
     cursor = db.cursor(dictionary = True)
     cursor.execute("SELECT a.train_no, a.station_code as from_stat, b.station_code as to_stat,a.departure_t, b.arrival_t, %s as date from STATION as a, STATION as b, AVAILABLE as c where a.train_no=b.train_no and a.station_code=%s and b.station_code=%s and a.mode = 0 and b.mode = 1 and c.train_no = a.train_no and c.week_day like %s", (date_s, from_code, to_code, wdn,))
-
-    # cursor.execute("SELECT t1.station_code as from_station, t1.train_no, t2.station_code as to_station from STATION as t1 cross join STATION as t2 where t1.station_code = %s and t2.station_code = %s and t1.train_no = t2.train_no", (from_code, to_code,))
     table = cursor.fetchall()
     result = []
     for row in table:
         result.append(row)
     return result
-    # return table
 
 def bookTicket(d, curr_user):
     cursor = db.cursor(dictionary = True)
@@ -93,11 +86,6 @@ def bookTicket(d, curr_user):
 
 def addUser(l):
     cursor = db.cursor(dictionary = True)
-    # cursor.execute("SELECT * FROM USER WHERE user_id =%s", (l[1],)) # l[0] is user_id
-    # table = cursor.fetchall()
-    # if len(table) > 0:
-    #     return False
-    #uname, uid, pass, age, dob, gender, phone, email, address
     try:
         cursor.execute("INSERT INTO USER VALUES(%s,%s,%s,%s,%s,%s,%s,%s)", (l[0],l[1],l[2],l[3],l[4],l[5],l[6],l[7],))
         db.commit()
@@ -107,12 +95,6 @@ def addUser(l):
 
 def createTrain(l):
     cursor = db.cursor(dictionary = True)
-    # cursor.execute("SELECT * FROM STATION WHERE train_no =%s", (l[0],))
-    # table = cursor.fetchall()
-    # if len(table) > 0:
-    #     return False
-    # cursor.execute("INSERT INTO STATION VALUES(%s, %s, %s, %s)", (l[0],l[1],l[2],l[3],))
-    # db.commit()
     try:
         cursor.execute("INSERT INTO AVAILABLE VALUES(%s, %s, %s)", (l[0],l[2],l[1],))
         db.commit()
@@ -122,7 +104,6 @@ def createTrain(l):
 
 def addStation(l):
     cursor = db.cursor(dictionary = True)
-    # train_no, source, sat,sdt,destination,dat,ddt
     try:
         cursor.execute("INSERT INTO STATION VALUES(%s, %s, %s, %s, 0)", (l[1], l[0], l[2], l[3],))
         cursor.execute("INSERT INTO STATION VALUES(%s, %s, %s, %s, 1)", (l[4], l[0], l[5], l[6],))
@@ -153,7 +134,6 @@ def getTrainDetails(train_no):
 
 def updateSeatsAndWeekdays(l):
     cursor = db.cursor(dictionary = True)
-    #l = [train_no, seat, week_day]
     cursor.execute("UPDATE AVAILABLE SET seat = %s WHERE train_no =%s", (l[1],l[0],))
     cursor.execute("UPDATE AVAILABLE SET week_day = %s WHERE train_no =%s", (l[2],l[0],))
     db.commit()
@@ -171,25 +151,44 @@ def getStations(train_no):
 def updateTrainStations(l):
     pass
 
-#{'station_code': 'CNB', 'train_no': '14006', 'arrival_t': '18:00', 'departure_t': '18:10'}
+def getTrains():
+    cursor = db.cursor(dictionary = True)
+    cursor.execute("SELECT * FROM AVAILABLE")
+    table = cursor.fetchall()
+    l = []
+    for row in table:
+        tmp = [row["train_no"], row["week_day"], row["seat"]]
+        l.append(tmp)
+    return l
 
-# l = getTrainDetails("1400")
-# print(l)
-# lst = ["989898", 80, "135"]
-# updateSeatsAndWeekdays(lst)
+def getStations():
+    cursor = db.cursor(dictionary = True)
+    cursor.execute("SELECT * FROM STATION")
+    table = cursor.fetchall()
+    l = []
+    for row in table:
+        tmp = [row["station_code"], row["train_no"], row["arrival_t"], row["departure_t"], row["mode"]]
+        l.append(tmp)
 
-# abcd = 
-# abcd = search_train("CNB", "DHN", "2022-11-11")
-# for e in abcd:
-#     print(e)
-# bookTicket()
-# val = checkUser("IR1122", "IR12")
-# print(val)
+    return l
 
-# print(getAvailableSeats("14006", "2022-11-01"))
-# tr = ["555555"]
-# print(delete_train(tr))
 
-'''
-select a.train_no,a.station_code, b.station_code,a.departure_t, b.arrival_t,"2022-10-28" as date from STATION as a, STATION as b, AVAILABLE as c where a.train_no=b.train_no and a.station_code="CNB" and b.station_code="PNBE" and c.train_no = a.train_no and c.week_day like '%4%'
-'''
+def getTickets():
+    cursor = db.cursor(dictionary = True)
+    cursor.execute("SELECT * FROM TICKET")
+    table = cursor.fetchall()
+    l = []
+    for row in table:
+        tmp = [row["pnr"], row["from_code"], row["to_code"], row["d_date"], row["passenger_name"], row["seat_no"], row["train_no"], row["user_id"]]
+        l.append(tmp) 
+    return l
+
+def getUsers():
+    cursor = db.cursor(dictionary = True)
+    cursor.execute("SELECT * FROM USER")
+    table = cursor.fetchall()
+    l = []
+    for row in table:
+        tmp = [row["user_name"], row["user_id"], row["user_password"], row["age"], row["gender"], row["phone_no"], row["emailid"], row["address"]]
+        l.append(tmp)
+    return l

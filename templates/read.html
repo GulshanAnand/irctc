@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trains</title>
+    <title>Read</title>
 
     <style>
         body {
@@ -20,8 +20,7 @@
         position: absolute;
         top: 50%;
         left: 50%;
-        height: fit-content;
-        width: fit-content;
+        width: 400px;
         -webkit-transform: translate(-50%, -50%);
         -moz-transform: translate(-50%, -50%);
         -ms-transform: translate(-50%, -50%);
@@ -35,8 +34,8 @@
         .login::before, .login::after {
         content: "";
         position: absolute;
-        width: 600px;
-        height: 600px;
+        width: 400px;
+        height: 400px;
         border-top-left-radius: 40%;
         border-top-right-radius: 45%;
         border-bottom-left-radius: 35%;
@@ -82,13 +81,13 @@
         margin-top: 10px;
         margin-left: -5px;
         border-radius: 5px;
-        background-color: #f45b69;
+        background-color: #4dae52;
         -webkit-transition: background-color 300ms;
         -moz-transition: background-color 300ms;
         transition: background-color 300ms;
         }
         .login > button:hover {
-        background-color: #f24353;
+        background-color: #4dae52;
         }
 
         @-webkit-keyframes wawes {
@@ -131,6 +130,7 @@
         bottom: 10px;
         font-size: 12px;
         }
+
         .content-table{
             border-collapse: collapse;
             margin: 25px 0;
@@ -153,62 +153,38 @@
         .content-table td {
             padding: 12px 15px;
         }
-        /* .content-table tbody tr{
-            border-bottom: 1px solid lightgray;
-        } */
-        
         .content-table tbody tr:nth-of-type(even){
             opacity: 70%;
             background-color: #4dae52;
             color: white;
         }
-        
-        /* .content-table tbody tr:last-of-type{
-            border-bottom: 2px solid #f24353;
-        } */
     </style>
     
-
 </head>
 <body>
-    <div class="login" method = 'POST'>
-        <table class="content-table">
-            <thead>
-                <tr>
-                    <th>Train Number</th>
-                    <th>Source</th>
-                    <th>Destination</th>
-                    <th>Departure Time</th>
-                    <th>Arrival Time</th>
-                    <th>Date</th>
-                    <th>Seats</th>
-                    <th>Click to Open</th>
-                </tr>
-            </thead>
-            <tbody>
-                {%for items in tr_list%}
-                <form method = 'POST'>
-                    <tr>
-                        {%for ele in items%}
-                        <th >
-                            <input name = "{{ele}}" value = "{{items[ele]}}" readonly/>
-                        </th>
-                        {%endfor%}
-                        <th>
-                            <button type="submit">
-                                Submit
-                            </button>
-                        </th>
-                    </tr>
-                </form>
-                {%endfor%}
-            </tbody>
-        </table>
-        <!-- <input type="text" placeholder="Username">
-        <input type="password" placeholder="Password">
-        <button >Login</button> -->
-    </div>
+    <div class="login">
+        <h1 style="text-align: center;">CHOOSE TABLE</h1>
+            <button class="search-btn search-btn-desktop;"  
+                    style="margin: 8px;"  
+                    onclick= "window.location.href = '/admin/read/trains'; " >
+                TRAINS
+            </button>
+            <button class="search-btn search-btn-desktop;"  
+                    style="margin: 8px;"  
+                    onclick= "window.location.href = '/admin/read/stations'; " >
+                STATIONS
+            </button>
+            <button class="search-btn search-btn-desktop;"  
+                    style="margin: 8px;"  
+                    onclick= "window.location.href = '/admin/read/tickets'; " >
+                TICKETS
+            </button>
+            <button class="search-btn search-btn-desktop;"  
+                    style="margin: 8px;"  
+                    onclick= "window.location.href = '/admin/read/users'; " >
+                USERS
+            </button>
+            
+      </div>
 </body>
 </html>
-
-

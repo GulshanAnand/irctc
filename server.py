@@ -130,9 +130,6 @@ def admin_home_page():
 def admin_create_train():
     if request.method == 'POST':
         train_no = request.form.get('train_no')
-        # station_no = request.form.get('station_no')
-        # arrival_time = request.form.get('arrival_time')
-        # departure_time = request.form.get('departure_time')
         seats = request.form.get('seats')
         day = request.form.get('day')
         train_details = [train_no,seats,day]
@@ -184,13 +181,45 @@ def admin_delete_train():
 
 @app.route('/admin/update',methods=['GET','POST'])
 def admin_update_train():
-
-    '''
-    WORK KRNA ISPE
-    '''
-
+    if request.method == 'POST':
+        train_no = request.form.get('train_no')
+        seats = request.form.get('seats')
+        day = request.form.get('day')
+        l = [train_no,seats,day]
+        updateSeatsAndWeekdays(l)
+        return redirect('/admin/update')
     return render_template('update.html')
+
+@app.route('/admin/read')
+def admin_read_page():
+    return render_template('read.html')
+
+@app.route('/admin/read/trains')
+def admin_read_trains():
+
+    trains = getTrains()
+    return render_template('read_trains.html', tr_list = trains)
+
+@app.route('/admin/read/stations')
+def admin_read_stations():
+
+    stations = getStations()
+    return render_template('read_stations.html', stations_list = stations)
+
+@app.route('/admin/read/tickets')
+def admin_read_tickets():
+
+    tickets = getTickets()
+    return render_template('read_tickets.html', tickets_list = tickets)
+
+@app.route('/admin/read/users',methods=['GET','POST'])
+def admin_read_users():
+
+    users = getUsers()
+    return render_template('read_users.html', users_list = users)
+
 
 # driver function
 if __name__ == '__main__':
     app.run(debug = True, host = '0.0.0.0', port = 80)
+
