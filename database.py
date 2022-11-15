@@ -1,5 +1,4 @@
 import mysql.connector as sql
-import json
 from encrypt import *
 import datetime
 
