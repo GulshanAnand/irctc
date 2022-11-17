@@ -186,7 +186,11 @@ def admin_update_train():
         seats = request.form.get('seats')
         day = request.form.get('day')
         l = [train_no,seats,day]
-        updateSeatsAndWeekdays(l)
+        flag = updateSeatsAndWeekdays(l)
+        if flag == False:
+            msg = 'TRAIN NUMBER DOES NOT EXIST'
+            url = '/admin/update'
+            return show_error_page(msg,url)
         return redirect('/admin/update')
     return render_template('update.html')
 

@@ -133,9 +133,15 @@ def getTrainDetails(train_no):
 
 def updateSeatsAndWeekdays(l):
     cursor = db.cursor(dictionary = True)
-    cursor.execute("UPDATE AVAILABLE SET seat = %s WHERE train_no =%s", (l[1],l[0],))
-    cursor.execute("UPDATE AVAILABLE SET week_day = %s WHERE train_no =%s", (l[2],l[0],))
-    db.commit()
+    cursor.execute("SELECT * from AVAILABLE where train_no = %s", (l[0],))
+    table = cursor.fetchall()
+    if len(table) == 0:
+        return False
+    else:
+        cursor.execute("UPDATE AVAILABLE SET seat = %s WHERE train_no =%s", (l[1],l[0],))
+        cursor.execute("UPDATE AVAILABLE SET week_day = %s WHERE train_no =%s", (l[2],l[0],))
+        db.commit()
+    return True
 
 def getStations(train_no):
     cursor = db.cursor(dictionary = True)
